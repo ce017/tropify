@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# large local artefacts — kept on disk, not in the repo
+# (video exports from the liquid-logo tool, and the root copy of the model
+#  that public/tropify.glb duplicates)
+/liquid-logo_*.mp4
+/tropify.glb
+public/liquid-logo/renders/*.mp4

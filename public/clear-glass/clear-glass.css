@@ -1,0 +1,71 @@
+/* Clear Glass — the material. Pair with clear-glass.js (or the React
+   component). MIT.
+
+   Everything here is the look; the JS adds the edge lens on top. */
+
+.clearglass {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #fff;
+
+  /* clear, not frosted — almost no fill of its own */
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+
+  /* the specular rim: bright top-left, softer bottom-right, plus contact shadow */
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.6),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.28),
+    inset 0 0 14px rgba(255, 255, 255, 0.1),
+    0 10px 26px rgba(0, 0, 0, 0.28);
+
+  /* Fallback for engines that reject url() inside backdrop-filter (Safari,
+     Firefox): they drop the inline value and land here, keeping the live
+     colour pickup, just without the edge bending. */
+  backdrop-filter: saturate(1.7) brightness(1.06);
+  -webkit-backdrop-filter: saturate(1.7) brightness(1.06);
+
+  transition:
+    transform 200ms cubic-bezier(0.2, 0.8, 0.3, 1),
+    box-shadow 200ms ease,
+    background 200ms ease;
+}
+
+.clearglass__label {
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+
+/* buttons: sizing + the .interactive() response */
+.clearglass--interactive {
+  padding: 0.85rem 1.6rem;
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+}
+
+.clearglass--interactive:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.75),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.35),
+    inset 0 0 18px rgba(255, 255, 255, 0.14),
+    0 16px 34px rgba(0, 0, 0, 0.34);
+}
+
+.clearglass--interactive:active {
+  transform: translateY(0) scale(0.985);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clearglass {
+    transition: none;
+  }
+}

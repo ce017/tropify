@@ -1,0 +1,47 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Clear Glass — demo</title>
+<link rel="stylesheet" href="clear-glass.css">
+<style>
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    gap: 1rem;
+    font: 16px/1.5 system-ui, sans-serif;
+    color: #fff;
+    background: linear-gradient(120deg, #ff2d55, #ffcc00, #34c759, #00c7be, #af52de);
+    background-size: 300% 300%;
+    animation: drift 18s ease-in-out infinite;
+  }
+  @keyframes drift {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  .row { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; }
+  nav.clearglass { gap: .25rem; padding: .35rem; }
+  nav .navlink {
+    padding: .5rem 1.05rem; border-radius: 999px; text-decoration: none;
+    color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.45);
+  }
+  nav .navlink:hover { background: rgba(255,255,255,.18); }
+</style>
+
+<nav class="clearglass">
+  <a class="navlink" href="#">Events</a>
+  <a class="navlink" href="#">Venues</a>
+  <a class="navlink" href="#">Gallery</a>
+</nav>
+
+<div class="row">
+  <button class="clearglass clearglass--interactive"><span class="clearglass__label">Book a date</span></button>
+  <button class="clearglass clearglass--interactive"><span class="clearglass__label">See the lineup</span></button>
+  <button class="clearglass clearglass--interactive"><span class="clearglass__label">Watch the reel</span></button>
+</div>
+
+<script type="module">
+  import { clearGlass } from './vanilla/clear-glass.js';
+  clearGlass(document.querySelectorAll('.clearglass--interactive'));
+  clearGlass(document.querySelector('nav.clearglass'), { strength: 16, edge: 14 });
+</script>

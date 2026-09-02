@@ -20,7 +20,376 @@
 }
 
 body {
-  background: var(--background);
+  background: #05070d;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ---------------------------------------------------------------- stage */
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: transparent;
+  isolation: isolate;
+  z-index: 1;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.fill {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.layer--halo {
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      32% 20% at 50% 46%,
+      rgba(255, 228, 182, 0.34) 0%,
+      rgba(120, 214, 214, 0.14) 44%,
+      transparent 72%
+    );
+}
+
+.layer--veil {
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.5;
+  background:
+    radial-gradient(60% 26% at 22% 62%, rgba(190, 205, 255, 0.3), transparent 70%),
+    radial-gradient(52% 20% at 78% 52%, rgba(214, 196, 255, 0.26), transparent 72%),
+    radial-gradient(70% 18% at 50% 74%, rgba(160, 190, 255, 0.22), transparent 68%);
+}
+
+.layer--logo {
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- chrome */
+
+.chrome {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.chrome--top { top: 0; }
+.chrome--bottom {
+  bottom: 0;
+  /* clear the fixed glass dock */
+  padding-bottom: clamp(4.5rem, 12vh, 6.5rem);
+}
+
+.tagline {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* ---------------------------------------------------------------- glass */
+
+.glass {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.08) 42%,
+      rgba(255, 255, 255, 0.04) 100%
+    );
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.14),
+    inset 0 0 22px rgba(255, 255, 255, 0.06),
+    0 10px 32px rgba(0, 0, 0, 0.38);
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.3, 1),
+    box-shadow 220ms ease, background 220ms ease;
+}
+
+/* the specular sweep across the top edge — what sells it as glass */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0.05) 38%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.25)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass--pill { border-radius: 999px; }
+
+.glass--nav {
+  gap: 0.35rem;
+  padding: 0.4rem;
+}
+
+.navlink {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.9);
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.navlink:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.glass__label { position: relative; z-index: 1; }
+
+/* ------------------------------------------------- liquid-glass-js buttons */
+
+/* the library builds its own DOM; these are the only hooks it exposes */
+.actions .glass-button {
+  transition: transform 200ms cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.actions .glass-button:hover {
+  transform: translateY(-2px);
+}
+
+.actions .glass-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.glass-button-text {
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+}
+
+
+/* ------------------------------------------------------------ cards-stage */
+
+.cards-stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100dvh;
+  background: transparent;
+}
+
+/* the gallery holds the screen while you scroll it, then lets go */
+.pin {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.pin__sticky {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  width: 100%;
+}
+
+.pin__sticky canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.cards-stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+/* ------------------------------------------------- fixed backdrop + dock */
+
+/* the sky the whole document scrolls over */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* glass parked above the page: the shader offsets its sample by scrollY, so a
+   fixed pill reads further down the snapshot as the document moves */
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: clamp(1rem, 4vh, 2.5rem);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.dock .actions {
+  pointer-events: auto;
+}
+
+/* ------------------------------------------------------------ clear glass */
+
+.clearglass {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #fff;
+
+  /* clear, not frosted — almost no fill of its own */
+  background: rgba(255, 255, 255, 0.04);
+
+  /* Fallback for engines that reject url() inside backdrop-filter (Safari,
+     Firefox): they drop the inline value and land here, keeping the live
+     colour pickup, just without the edge bending. */
+  backdrop-filter: saturate(1.7) brightness(1.06);
+  -webkit-backdrop-filter: saturate(1.7) brightness(1.06);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+
+  /* the specular rim: bright top-left, softer bottom-right, plus contact shadow */
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.6),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.28),
+    inset 0 0 14px rgba(255, 255, 255, 0.1),
+    0 10px 26px rgba(0, 0, 0, 0.28);
+
+  transition:
+    transform 200ms cubic-bezier(0.2, 0.8, 0.3, 1),
+    box-shadow 200ms ease,
+    background 200ms ease;
+}
+
+.clearglass__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.clearglass__label {
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+
+.clearglass--interactive {
+  padding: 0.85rem 1.6rem;
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+}
+
+/* .interactive() — brightens and lifts under the finger */
+.clearglass--interactive:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.75),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.35),
+    inset 0 0 18px rgba(255, 255, 255, 0.14),
+    0 16px 34px rgba(0, 0, 0, 0.34);
+}
+
+.clearglass--interactive:active {
+  transform: translateY(0) scale(0.985);
+}
+
+
+/* nav is one glass capsule holding plain links, like the Apple tab bar */
+.clearglass--nav {
+  gap: 0.25rem;
+  padding: 0.35rem;
+}
+
+.clearglass--nav .navlink {
+  padding: 0.5rem 1.05rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+  transition: background 180ms ease;
+}
+
+.clearglass--nav .navlink:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ---------------------------------------------------------------- outro */
+
+.outro {
+  position: relative;
+  z-index: 1;
+  min-height: 70dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: clamp(2rem, 8vh, 5rem) 1.5rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.outro h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+}
+
+.outro p {
+  margin: 0;
+  max-width: 44ch;
+  color: rgba(255, 255, 255, 0.72);
 }
