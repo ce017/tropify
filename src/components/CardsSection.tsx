@@ -9,10 +9,9 @@ import { Cards } from "@/components/Cards";
  * carries on down the page.
  *
  * A sticky child inside a tall wrapper does the pinning; the wrapper's scroll
- * progress becomes the carousel's rotation.
+ * progress becomes the carousel's rotation. The wrapper's height — how long it
+ * holds — is --pin-turns in the stylesheet, shorter on phones.
  */
-const TURNS = 3; // extra viewports of scroll spent inside the gallery
-
 export function CardsSection() {
   const wrap = useRef<HTMLElement>(null);
   const progress = useRef(0);
@@ -51,7 +50,6 @@ export function CardsSection() {
     <section
       ref={wrap}
       className="pin"
-      style={{ height: `${(TURNS + 1) * 100}dvh` }}
       data-html2canvas-ignore
     >
       <div className="pin__sticky">

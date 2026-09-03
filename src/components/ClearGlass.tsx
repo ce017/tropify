@@ -94,12 +94,17 @@ export function useClearGlass<T extends HTMLElement>(
   return { defs, style: { backdropFilter: filter, WebkitBackdropFilter: filter } };
 }
 
-type ButtonProps = ComponentPropsWithoutRef<"button"> & ClearGlassOptions;
+type ButtonProps = ComponentPropsWithoutRef<"button"> &
+  ClearGlassOptions & {
+    /** shown instead of `children` on narrow screens, so the dock stays one row */
+    short?: ReactNode;
+  };
 
 export function ClearGlassButton({
   strength,
   edge,
   radius,
+  short,
   className = "",
   children,
   ...rest
@@ -115,7 +120,10 @@ export function ClearGlassButton({
       style={{ ...style, ...rest.style }}
     >
       {defs}
-      <span className="clearglass__label">{children}</span>
+      <span className="clearglass__label">
+        {short ? <span className="label--wide">{children}</span> : children}
+        {short ? <span className="label--narrow">{short}</span> : null}
+      </span>
     </button>
   );
 }

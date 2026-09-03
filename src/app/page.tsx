@@ -3,7 +3,11 @@ import { ClearGlassButton, ClearGlassPanel } from "@/components/ClearGlass";
 import { CloudField } from "@/components/CloudField";
 import { LogoScene } from "@/components/LogoScene";
 
-const BUTTONS = ["Tickets & tables", "See the lineup", "Watch the reel"];
+const BUTTONS = [
+  { text: "Tickets & tables", short: "Tickets" },
+  { text: "See the lineup", short: "Lineup" },
+  { text: "Watch the reel", short: "Reel" },
+];
 const NAV = ["Events", "Venues", "Gallery", "Contact"];
 
 export default function Home() {
@@ -55,8 +59,10 @@ export default function Home() {
       {/* the glass stays put while the page moves behind it */}
       <div className="dock">
         <div className="actions">
-          {BUTTONS.map((text) => (
-            <ClearGlassButton key={text}>{text}</ClearGlassButton>
+          {BUTTONS.map((b) => (
+            <ClearGlassButton key={b.text} short={b.short}>
+              {b.text}
+            </ClearGlassButton>
           ))}
         </div>
       </div>

@@ -46,3 +46,6 @@ next-env.d.ts
 /liquid-logo_*.mp4
 /tropify.glb
 public/liquid-logo/renders/*.mp4
+
+.vercel
+.env*

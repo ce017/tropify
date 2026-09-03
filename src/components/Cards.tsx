@@ -8,10 +8,11 @@
 // in Next, so the asset URLs are plain /cards/* paths from public/.
 
 import * as THREE from "three";
-import { useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import {
   Canvas,
   useFrame,
+  useThree,
   type ThreeElements,
   type ThreeEvent,
 } from "@react-three/fiber";
@@ -30,7 +31,11 @@ export const Cards = ({ progress }: { progress?: Progress }) => {
   const fallback = useRef(0);
   const p = progress ?? fallback;
   return (
-    <Canvas camera={{ position: [0, 0, 100], fov: 15 }} gl={{ alpha: true }}>
+    <Canvas
+      camera={{ position: [0, 0, 100], fov: 15 }}
+      dpr={[1, 2]}
+      gl={{ alpha: true }}
+    >
       <fog attach="fog" args={["#a79", 8.5, 12]} />
       <Rig progress={p} rotation={[0, 0, 0.15]}>
         <Carousel />
@@ -48,9 +53,25 @@ function Rig({ progress, ...props }: ThreeElements["group"] & { progress: Progre
   useFrame((state, delta) => {
     ref.current.rotation.y = -(progress.current ?? 0) * (Math.PI * 2); // Rotate contents
     state.events.update?.(); // Raycasts every frame rather than on pointer-move
+    // Upstream's 15deg fov assumes a landscape viewport; on a portrait phone it
+    // crops the carousel badly. Portrait gets a wider fov, a flatter angle and a
+    // closer camera, so fewer cards show but at a readable size.
+    // Set per-frame: R3F re-applies the <Canvas camera> prop on resize, which
+    // would undo a fov assigned in an effect.
+    const portrait = state.size.width < state.size.height;
+    const camera = state.camera as THREE.PerspectiveCamera;
+    const fov = portrait ? 26 : 15;
+    if (camera.fov !== fov) {
+      camera.fov = fov;
+      camera.updateProjectionMatrix();
+    }
     easing.damp3(
       state.camera.position,
-      [-state.pointer.x * 2, state.pointer.y + 1.5, 10],
+      [
+        -state.pointer.x * 2,
+        state.pointer.y + (portrait ? 0.55 : 1.5),
+        portrait ? 9 : 10,
+      ],
       0.3,
       delta,
     ); // Move camera

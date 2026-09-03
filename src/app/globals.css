@@ -103,6 +103,7 @@ body {
 
 .tagline {
   margin: 0;
+  text-align: center;
   color: rgba(255, 255, 255, 0.82);
   font-size: clamp(0.95rem, 2.2vw, 1.15rem);
   letter-spacing: 0.02em;
@@ -221,9 +222,11 @@ body {
 
 /* the gallery holds the screen while you scroll it, then lets go */
 .pin {
+  --pin-turns: 4;
   position: relative;
   z-index: 1;
   width: 100%;
+  height: calc(var(--pin-turns) * 100dvh);
 }
 
 .pin__sticky {
@@ -392,4 +395,72 @@ body {
   margin: 0;
   max-width: 44ch;
   color: rgba(255, 255, 255, 0.72);
+}
+
+/* ------------------------------------------------------------ small screens */
+
+.label--narrow { display: none; }
+
+@media (max-width: 640px) {
+  /* short labels keep the dock to a single row at 375px */
+  .label--wide { display: none; }
+  .label--narrow { display: inline; }
+
+  .clearglass--interactive {
+    padding: 0.7rem 1.15rem;
+    font-size: 0.9rem;
+  }
+
+  .clearglass--nav {
+    gap: 0.1rem;
+    padding: 0.3rem;
+    max-width: 100%;
+  }
+
+  .clearglass--nav .navlink {
+    padding: 0.45rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .chrome {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  /* the fixed dock is taller in proportion here — keep the tagline clear of it */
+  .chrome--bottom {
+    padding-bottom: 6rem;
+  }
+
+  .tagline {
+    font-size: 0.85rem;
+    max-width: 22ch;
+    line-height: 1.45;
+  }
+
+  .actions {
+    gap: 0.5rem;
+  }
+
+  .dock {
+    bottom: 1rem;
+  }
+
+  .outro {
+    min-height: 60dvh;
+    gap: 1rem;
+  }
+
+  /* less thumb-work to get through the gallery on a phone */
+  .pin {
+    --pin-turns: 2.5;
+  }
+}
+
+/* very narrow: let the nav scroll rather than squeeze the labels illegibly */
+@media (max-width: 380px) {
+  .clearglass--nav .navlink {
+    padding: 0.45rem 0.5rem;
+    font-size: 0.75rem;
+  }
 }
